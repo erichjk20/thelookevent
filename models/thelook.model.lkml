@@ -104,11 +104,6 @@ explore: order_items {
   # }
 }
 
-
-
-
-
-
 #########  Event Data Explores #########
 
 explore: events {
@@ -348,7 +343,6 @@ label: "E-Comm Cohort Analysis Training"
 }
 
 explore: kmeans_model5 {}
-
 
 explore: ecomm_predict {
   label: "(8) Cohort Analysis"

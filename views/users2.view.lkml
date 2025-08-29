@@ -1,7 +1,6 @@
-view: users {
+view: users2 {
   sql_table_name: looker-private-demo.ecomm.users ;;
-  view_label: "Users"
-  ## Demographics ##
+  view_label: "Users2"
 
   dimension: id {
     label: "ID"
@@ -254,24 +253,6 @@ view: users {
     sql: ${TABLE}.traffic_source ;;
   }
 
-  dimension: ssn {
-    label: "SSN"
-    # dummy field used in next dim, generate 4 random numbers to be the last 4 digits
-    hidden: yes
-    type: string
-    sql: CONCAT(CAST(FLOOR(10*RAND()) AS INT64),CAST(FLOOR(10*RAND()) AS INT64),
-                CAST(FLOOR(10*RAND()) AS INT64),CAST(FLOOR(10*RAND()) AS INT64));;
-  }
-
-  dimension: ssn_last_4 {
-    label: "SSN Last 4"
-    description: "Only users with sufficient permissions will see this data"
-    type: string
-    sql: CASE WHEN '{{_user_attributes["can_see_sensitive_data"]}}' = 'Yes'
-                THEN ${ssn}
-                ELSE '####' END;;
-  }
-
   ## MEASURES ##
 
   measure: count {
@@ -297,26 +278,5 @@ view: users {
 
   set: detail {
     fields: [id, name, email, age, created_date, orders.count, order_items.count]
-  }
-}
-
-# If necessary, uncomment the line below to include explore_source.
-# include: "thelook.model.lkml"
-
-view: first_table {
-  derived_table: {
-    explore_source: order_items {
-      column: order_count {}
-      column: name { field: distribution_centers.name }
-    }
-  }
-  dimension: order_count {
-    label: "Orders Order Count"
-    description: ""
-    type: number
-  }
-  dimension: name {
-    label: "Distribution Center Name"
-    description: ""
   }
 }
