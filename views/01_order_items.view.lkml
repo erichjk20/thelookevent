@@ -3,6 +3,37 @@ view: order_items {
   view_label: "Order Items"
   ########## IDs, Foreign Keys, Counts ###########
 
+  parameter: variable_selector {
+      label: "Variable Selector"
+      description: "Use to select Revenue, Orders, or Users"
+      type: string
+      allowed_value: {
+        label: "Total Revenue"
+        value: "revenue"
+      }
+      allowed_value: {
+        label: "Total Gross Margin"
+        value: "gross_margin"
+      }
+      allowed_value: {
+        label: "Total Users"
+        value: "users"
+      }
+    }
+
+  measure: created_variable_selector {
+    type: number
+    value_format_name: decimal_0
+    description: "Used with variable_selctor to use correct measure"
+    sql:
+      CASE
+        WHEN {% parameter variable_selector %} = 'revenue' THEN ${total_sale_price}
+        WHEN {% parameter variable_selector %} = 'gross_margin' THEN ${total_gross_margin}
+        WHEN {% parameter variable_selector %} = 'users' THEN ${users.count}
+      END
+        ;;
+  }
+
   dimension: id {
     label: "ID"
     description: "Unique identifier for each order item (5 digits)"
@@ -44,7 +75,8 @@ view: order_items {
     filters:
     {field:created_date
       value: "28 days"
-    }}
+    }
+  }
 
   measure: order_count {
     view_label: "Orders"
